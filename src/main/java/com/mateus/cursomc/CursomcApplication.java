@@ -34,12 +34,15 @@ public class CursomcApplication implements CommandLineRunner {
 		Produto p2 = new Produto (null, "Monitor", new BigDecimal(1000.00));
 		Produto p3 = new Produto (null, "Placa de vídeo", new BigDecimal(1500.00));
 		
+		
+		p1.getCategorias().addAll(Arrays.asList(c1));
+		p2.getCategorias().addAll(Arrays.asList(c1,c2));
+		p3.getCategorias().addAll(Arrays.asList(c1));
+		
 		c1.getProdutos().addAll(Arrays.asList(p1,p2,p3));
 		c2.getProdutos().addAll(Arrays.asList(p2));
 		
-		p1.getCategorias().addAll(Arrays.asList(c1));
-		p1.getCategorias().addAll(Arrays.asList(c1,c2));
-		p1.getCategorias().addAll(Arrays.asList(c1));
+		
 		
 		categoriarepository.saveAll(Arrays.asList(c1,c2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
