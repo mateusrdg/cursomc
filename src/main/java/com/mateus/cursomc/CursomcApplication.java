@@ -2,6 +2,7 @@ package com.mateus.cursomc;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,18 +14,24 @@ import com.mateus.cursomc.domain.Cidade;
 import com.mateus.cursomc.domain.Cliente;
 import com.mateus.cursomc.domain.Endereco;
 import com.mateus.cursomc.domain.Estado;
+import com.mateus.cursomc.domain.PagamentoComBoleto;
+import com.mateus.cursomc.domain.PagamentoComCartao;
+import com.mateus.cursomc.domain.Pedido;
 import com.mateus.cursomc.domain.Produto;
+import com.mateus.cursomc.domain.enums.EstadoPagamento;
 import com.mateus.cursomc.domain.enums.TipoCliente;
 import com.mateus.cursomc.repositories.CategoriaRepository;
 import com.mateus.cursomc.repositories.CidadeRepository;
 import com.mateus.cursomc.repositories.ClienteRepository;
 import com.mateus.cursomc.repositories.EnderecoRepository;
 import com.mateus.cursomc.repositories.EstadoRepository;
+import com.mateus.cursomc.repositories.PagamentoRepository;
+import com.mateus.cursomc.repositories.PedidoRepository;
 import com.mateus.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner {
-
+	
 	@Autowired
 	private CategoriaRepository categoriarepository;
 	@Autowired
@@ -37,13 +44,19 @@ public class CursomcApplication implements CommandLineRunner {
 	private ClienteRepository clienteRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		
 		Categoria c1 = new Categoria (null, "Informática") ;
 		Categoria c2 = new Categoria (null, "Escritório") ;
 		
@@ -85,6 +98,27 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1,e2));
+		
+		Calendar dataHora1 = Calendar.getInstance();
+		dataHora1.set(2019,8,30,10,32);
+		Pedido ped1 = new Pedido(null, dataHora1, cli1, e1);
+		
+		Calendar dataHora2 = Calendar.getInstance();
+		dataHora2.set(2019,9,10,19,35);
+		Pedido ped2 = new Pedido(null, dataHora2, cli1, e2);
+		
+		PagamentoComCartao pgto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		
+		Calendar data = Calendar.getInstance();
+		data.set(2019,9,20);
+		PagamentoComBoleto pgto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, data, null);
+		
+		ped1.setPagamento(pgto1);
+		ped2.setPagamento(pgto2);
+		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pgto1,pgto2));		;
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
 		
 	}
 
