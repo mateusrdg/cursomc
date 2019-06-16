@@ -33,7 +33,7 @@ public class Produto implements Serializable {
 	
 	private BigDecimal preco;
 	
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns= @JoinColumn(name="produto_id"), inverseJoinColumns = @JoinColumn (name= "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<>();
@@ -50,7 +50,16 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 	}
-
+	
+	@JsonIgnore
+	public List<Pedido> getPedidos(){
+		List<Pedido>lista = new ArrayList<>();
+		for (ItemPedido x : itens) {
+			lista.add(x.getPedido());
+		}
+		return lista;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -90,14 +99,7 @@ public class Produto implements Serializable {
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
-	@JsonIgnore
-	public List<Pedido> getPedidos(){
-		List<Pedido>lista = new ArrayList<>();
-		for (ItemPedido x : itens) {
-			lista.add(x.getPedido());
-		}
-		return lista;
-	}
+	
 
 	@Override
 	public int hashCode() {
