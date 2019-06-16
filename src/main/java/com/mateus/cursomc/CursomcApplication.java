@@ -14,6 +14,7 @@ import com.mateus.cursomc.domain.Cidade;
 import com.mateus.cursomc.domain.Cliente;
 import com.mateus.cursomc.domain.Endereco;
 import com.mateus.cursomc.domain.Estado;
+import com.mateus.cursomc.domain.ItemPedido;
 import com.mateus.cursomc.domain.PagamentoComBoleto;
 import com.mateus.cursomc.domain.PagamentoComCartao;
 import com.mateus.cursomc.domain.Pedido;
@@ -25,6 +26,7 @@ import com.mateus.cursomc.repositories.CidadeRepository;
 import com.mateus.cursomc.repositories.ClienteRepository;
 import com.mateus.cursomc.repositories.EnderecoRepository;
 import com.mateus.cursomc.repositories.EstadoRepository;
+import com.mateus.cursomc.repositories.ItemPedidoRepository;
 import com.mateus.cursomc.repositories.PagamentoRepository;
 import com.mateus.cursomc.repositories.PedidoRepository;
 import com.mateus.cursomc.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CursomcApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -119,6 +123,19 @@ public class CursomcApplication implements CommandLineRunner {
 		pagamentoRepository.saveAll(Arrays.asList(pgto1,pgto2));		;
 		
 		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, new BigDecimal(2000.0), new BigDecimal(0), 1);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, new BigDecimal(80.0), new BigDecimal(0), 2);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, new BigDecimal(800.0), new BigDecimal(100.0), 1);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped1.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 		
 	}
 
