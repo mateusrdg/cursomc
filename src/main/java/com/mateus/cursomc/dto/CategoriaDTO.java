@@ -10,6 +10,7 @@ public class CategoriaDTO implements Serializable {
 	private Integer id;
 	private String nome;
 	
+	@SuppressWarnings("unused")
 	private CategoriaDTO () {
 	}
 	
