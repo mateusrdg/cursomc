@@ -29,7 +29,11 @@ public class ItemPedido implements Serializable {
 		this.desconto = desconto;
 		this.quantidade = quantidade;
 	}
-
+	
+	public BigDecimal getSubtotal () {
+		return (preco.subtract(desconto)).multiply(new BigDecimal(quantidade)) ; 
+	}
+	
 	@JsonIgnore
 	public Pedido getPedido () {
 		return id.getPedido();

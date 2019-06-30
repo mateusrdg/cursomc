@@ -1,6 +1,7 @@
 package com.mateus.cursomc.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -57,6 +57,16 @@ public class Pedido implements Serializable {
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
+	public BigDecimal getValorTotal () {
+		BigDecimal soma = new BigDecimal(0); 
+		
+		for (ItemPedido ip : itens) {
+			soma.add(ip.getSubtotal());
+		}
+		
+		return soma;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
