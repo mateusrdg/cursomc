@@ -58,13 +58,8 @@ public class Pedido implements Serializable {
 	}
 
 	public BigDecimal getValorTotal () {
-		BigDecimal soma = new BigDecimal(0); 
-		
-		for (ItemPedido ip : itens) {
-			soma.add(ip.getSubtotal());
-		}
-		
-		return soma;
+		    
+		return itens.stream().map(item-> item.getSubtotal()).reduce(BigDecimal.ZERO,BigDecimal::add);
 	}
 	
 	public Integer getId() {
