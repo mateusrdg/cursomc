@@ -61,7 +61,7 @@ public class Pedido implements Serializable {
 
 	public BigDecimal getValorTotal () {
 		    
-		return itens.stream().map(item-> item.getSubtotal()).reduce(BigDecimal.ZERO,BigDecimal::add);
+		return itens.stream().map(item-> item.getSubTotal()).reduce(BigDecimal.ZERO,BigDecimal::add);
 	}
 	
 	public Integer getId() {

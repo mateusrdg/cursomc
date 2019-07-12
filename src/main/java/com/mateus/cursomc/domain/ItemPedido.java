@@ -32,7 +32,7 @@ public class ItemPedido implements Serializable {
 		this.quantidade = quantidade;
 	}
 	
-	public BigDecimal getSubtotal () {
+	public BigDecimal getSubTotal () {
 		return (preco.subtract(desconto)).multiply(new BigDecimal(quantidade)) ; 
 	}
 	
@@ -121,7 +121,7 @@ public class ItemPedido implements Serializable {
 		builder.append(", Preço Unitário: ");
 		builder.append(nf.format(getPreco()));
 		builder.append(", Subtotal: ");
-		builder.append(nf.format(getSubtotal()));
+		builder.append(nf.format(getSubTotal()));
 		builder.append("\n");
 		return builder.toString();
 	}
