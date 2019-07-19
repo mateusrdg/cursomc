@@ -19,6 +19,7 @@ import com.mateus.cursomc.domain.PagamentoComCartao;
 import com.mateus.cursomc.domain.Pedido;
 import com.mateus.cursomc.domain.Produto;
 import com.mateus.cursomc.domain.enums.EstadoPagamento;
+import com.mateus.cursomc.domain.enums.Perfil;
 import com.mateus.cursomc.domain.enums.TipoCliente;
 import com.mateus.cursomc.repositories.CategoriaRepository;
 import com.mateus.cursomc.repositories.CidadeRepository;
@@ -118,14 +119,21 @@ public class DBService {
 
 		Cliente cli1 = new Cliente(null, "Maria Silva", "maria@gmail.com", "605413293-83", TipoCliente.PESSOAFISICA, pe.encode("123456"));
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93839393"));
-
+		
+		Cliente cli2 = new Cliente(null, "Mateus Rodrigues", "mateusrodrigues-cp@hotmail.com", "605413293-83", TipoCliente.PESSOAFISICA, pe.encode("123456"));
+		cli2.addPerfil(Perfil.ADMIN);
+		cli2.getTelefones().addAll(Arrays.asList("21545878", "654787894"));
+		
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 203", "Jardim", "60440530", cli1, cid1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "60440530.", cli1, cid2);
+		Endereco e3 = new Endereco(null, "Rua Gaspar Lemos", "275", "Sala 800", "Pici", "60440530.", cli2, cid2);
 
+		
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli1.getEnderecos().addAll(Arrays.asList(e3));
 
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		Calendar dataHora1 = Calendar.getInstance();
 		dataHora1.set(2019, 8, 30, 10, 32);
