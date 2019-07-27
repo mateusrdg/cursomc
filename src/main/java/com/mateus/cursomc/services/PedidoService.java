@@ -5,8 +5,12 @@ import java.util.Calendar;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.mateus.cursomc.domain.Cliente;
 import com.mateus.cursomc.domain.ItemPedido;
 import com.mateus.cursomc.domain.PagamentoComBoleto;
 import com.mateus.cursomc.domain.Pedido;
@@ -14,6 +18,8 @@ import com.mateus.cursomc.domain.enums.EstadoPagamento;
 import com.mateus.cursomc.repositories.ItemPedidoRepository;
 import com.mateus.cursomc.repositories.PagamentoRepository;
 import com.mateus.cursomc.repositories.PedidoRepository;
+import com.mateus.cursomc.security.UserSS;
+import com.mateus.cursomc.services.exceptions.AuthorizationException;
 import com.mateus.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -72,5 +78,15 @@ public class PedidoService {
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		
 		return obj;
+	}
+	
+	public Page<Pedido> findPage (Integer page, Integer linesPerPage, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("acesso negado");
+		}
+		Cliente cliente = clienteService.find(user.getId());
+		return repo.findByCliente(cliente, pageRequest);
 	}
 }
